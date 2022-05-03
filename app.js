@@ -31,8 +31,6 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
-
-
 app.use(
   session({
     secret: process.env.SECRET_STRING,
@@ -42,6 +40,10 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(function (req, res, next) {
+  res.locals.currentUser = req.user;
+  next();
+});
 app.use(express.urlencoded({ extended: false }));
 
 app.use(logger("dev"));

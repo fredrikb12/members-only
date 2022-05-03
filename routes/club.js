@@ -3,7 +3,7 @@ const router = express.Router();
 const club_controller = require("../controllers/clubController");
 
 router.get("/", (req, res, next) => {
-  res.render("index", { title: "Home page" });
+  res.render("index", { title: "Home page", user: req.user });
 });
 
 module.exports = router;

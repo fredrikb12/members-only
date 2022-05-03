@@ -7,7 +7,13 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
 exports.user_create_get = function (req, res, next) {
-  res.render("user_form", { title: "Create User" });
+  if (req.user) {
+    res.redirect("/");
+  }
+  res.render("user_form", {
+    title: "Create User",
+    user: req.user || null,
+  });
 };
 
 exports.user_create_post = [
@@ -62,10 +68,8 @@ exports.user_login_get = function (req, res, next) {
   res.render("user_login", { title: "Log In" });
 };
 
-exports.user_login_post = function (req, res, next) {
-  passport.authenticate("local", {
-    successRedirect: "/club",
-    failureRedirect: "/log-in",
-    failureMessage: true,
-  });
-};
+exports.user_login_post = passport.authenticate("local", {
+  successRedirect: "/club",
+  failureRedirect: "/log-in",
+  failureMessage: true,
+});

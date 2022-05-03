@@ -51,7 +51,7 @@ exports.user_create_post = [
         }).save((err) => {
           if (err) return next(err);
           console.log("Hello");
-          res.redirect("/club");
+          res.redirect("/club", { user: req.user});
         });
       });
     }
