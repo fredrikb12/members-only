@@ -1,0 +1,14 @@
+extends layout
+
+block content
+
+  h1= title
+  if user 
+    h2 Welcome #{user}
+
+  form(method="POST" action="/club/log-in")
+    label(for="username") Email: 
+    input#username(type="email" placeholder="john_doe@gmail.com" name="username")
+    label(for="password") Password:
+    input#password(type="password" name="password")
+    button(type="submit") Submit
