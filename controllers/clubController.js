@@ -57,17 +57,3 @@ exports.user_create_post = [
     }
   },
 ];
-
-exports.user_login_get = function (req, res, next) {
-  if (req.user) res.redirect("/");
-  res.render("user_login", { title: "Log In" });
-};
-
-exports.user_login_post = function (req, res, next) {
-  passport.authenticate("local", {
-    successRedirect: "/club",
-    failureRedirect: "/club/log-in",
-    failureMessage: true,
-    user: req.user,
-  });
-};

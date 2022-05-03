@@ -29,29 +29,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
-/*passport.use(
-  new LocalStrategy((username, password, done) => {
-    User.findOne({ username: username }, (err, user) => {
-      if (err) return done(err);
-      if (!user) return done(null, false, { message: "Incorrect username" });
-
-      bcrypt.compare(password, user.password, (err, res) => {
-        if (res) return done(null, user);
-        else return done(null, false, { message: "Incorrect password" });
-      });
-    });
-  })
-);
-
-passport.serializeUser(function (user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function (id, done) {
-  User.findById(id, function (err, user) {
-    done(err, user);
-  });
-});*/
+require("./config/passport");
 
 app.use(
   session({
@@ -73,15 +51,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", authRouter);
 app.use("/", indexRouter);
 app.use("/club", clubRouter);
-
-
-/*app.post(
-  "/club/log-in",
-  passport.authenticate("local", {
-    successRedirect: "/club",
-    failureRedirect: "/club/log-in",
-  })
-);*/
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
