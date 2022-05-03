@@ -1,0 +1,22 @@
+extends layout 
+
+block content 
+
+  h1= title
+
+  form(method="POST" action="" style="display:grid;grid-template-columns:150px 1fr; max-width:600px;gap:15px;font-size:0.9rem;")
+    label(for="first_name") First name:
+    input#first_name(type="text" name="first_name" required="true" placeholder="John" value=(first_name===undefined ? "" : first_name))
+    label(for="last_name") Last name:
+    input#last_name(type="text" name="last_name" required="true" placeholder="Doe" value=(last_name===undefined ? "" : last_name))
+    label(for="username") Email:
+    input#username(type="email" name="username" required="true" placeholder="user_name@gmail.com" value=(username===undefined ? "" : username))
+    label(for="password") Password: 
+    input#password(type="password" name="password" required="true")
+    label(for="password_confirm") Confirm Password:
+    input#password_confirm(type="password" name="password_confirm" required="true")
+    button(type="submit" style="max-width:100px;font-size:1rem;") Sign Up
+  if errors 
+    ul
+      for error in errors
+        li!= error.msg
