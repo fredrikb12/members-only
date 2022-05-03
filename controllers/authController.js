@@ -19,7 +19,7 @@ exports.user_create_post = [
     .trim()
     .isLength({ min: 3, max: 30 })
     .escape(),
-  body("username", "Email must be valid").normalizeEmail().isEmail().escape(),
+  body("username", "Email must be valid").normalizeEmail().isEmail(),
   body("password", "Password must be at least 5 characters long")
     .trim()
     .isLength({ min: 5 })

@@ -15,6 +15,8 @@ const indexRouter = require("./routes/index");
 const clubRouter = require("./routes/club");
 const authRouter = require("./routes/auth");
 
+require("./config/passport");
+
 mongoose.connect(process.env.MONGODB_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -29,7 +31,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
-require("./config/passport");
+
 
 app.use(
   session({
