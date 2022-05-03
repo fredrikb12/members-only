@@ -12,7 +12,7 @@ router.get("/user/create", club_controller.user_create_get);
 
 router.post("/user/create", club_controller.user_create_post);
 
-router.get("/log-in", club_controller.user_login_get);
+//router.get("/log-in", club_controller.user_login_get);
 
 //router.post("/log-in", club_controller.user_login_post);
 
