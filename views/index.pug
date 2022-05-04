@@ -30,6 +30,6 @@ block content
             if locals.currentUser && locals.currentUser.user_type == "member"
               div(style="display:flex;gap:10px;align-items:center;")
                 p #{message.author.first_name} #{message.author.last_name} |
-                p(style="font-size:0.8rem;color: #ababab;") #{message.created_at}
+                p(style="font-size:0.8rem;color: #ababab;") #{message.date}
             
 

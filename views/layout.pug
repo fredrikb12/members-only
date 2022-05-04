@@ -12,6 +12,9 @@ html
           if locals.currentUser
             li
               a(href="/club/message") Create Message
+          else 
+            li 
+              a(href="/club/user/create") Create Account
 
       div 
         if !locals.currentUser

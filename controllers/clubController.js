@@ -5,6 +5,7 @@ const { body, validationResult } = require("express-validator");
 const req = require("express/lib/request");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const luxon = require("luxon");
 
 exports.index_get = function (req, res, next) {
   Message.find()
@@ -13,6 +14,12 @@ exports.index_get = function (req, res, next) {
     .exec(function (err, results) {
       if (err) return next(err);
       else {
+        results.forEach((message) => {
+          console.log(message.createdAt);
+          message.date = luxon.DateTime.fromMillis(
+            message.createdAt
+          ).toLocaleString(luxon.DateTime.DATE_MED);
+        });
         res.render("index", { title: "Home page", messages: results });
       }
     });
@@ -75,6 +82,6 @@ exports.message_delete_post = function (req, res, next) {
   });
 };
 
-exports.message_delete_get = function(req, res, next) {
+exports.message_delete_get = function (req, res, next) {
   res.redirect("/");
-}
+};

@@ -6,8 +6,10 @@ const MessageSchema = new Schema(
     title: { type: String, required: true },
     text: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, required: true, ref: "User" },
+    createdAt: Number,
+    updatedAt: Number,
   },
-  { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
+  { timestamps: { currentTime: () => Date.now() } }
 );
 
 module.exports = mongoose.model("Message", MessageSchema);
