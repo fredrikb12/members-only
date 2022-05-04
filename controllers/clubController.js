@@ -9,7 +9,7 @@ const luxon = require("luxon");
 
 exports.index_get = function (req, res, next) {
   Message.find()
-    .sort({ created_at: "desc" })
+    .sort({ createdAt: "desc" })
     .populate("author")
     .exec(function (err, results) {
       if (err) return next(err);
@@ -23,7 +23,6 @@ exports.index_get = function (req, res, next) {
         res.render("index", { title: "Home page", messages: results });
       }
     });
-  //res.render("index", { title: "Home page", user: req.user });
 };
 
 exports.message_get = function (req, res, next) {
