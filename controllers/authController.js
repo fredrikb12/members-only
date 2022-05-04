@@ -50,18 +50,36 @@ exports.user_create_post = [
       });
       return;
     } else {
-      bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
-        if (err) return next(err);
-        const user = new User({
-          first_name: req.body.first_name,
-          last_name: req.body.last_name,
-          username: req.body.username,
-          password: hashedPassword,
-          user_type: "user",
-        }).save((err) => {
-          if (err) return next(err);
-          res.redirect("/club");
-        });
+      User.findOne({ username: req.body.username }).exec(function (
+        err,
+        results
+      ) {
+        if (err) {
+          return next(err);
+        } else if (results !== null) {
+          res.render("user_form", {
+            title: "Create User",
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            username: req.body.username,
+            errors: [{msg: "Email already in use."}],
+          });
+          return;
+        } else {
+          bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+            if (err) return next(err);
+            const user = new User({
+              first_name: req.body.first_name,
+              last_name: req.body.last_name,
+              username: req.body.username,
+              password: hashedPassword,
+              user_type: "user",
+            }).save((err) => {
+              if (err) return next(err);
+              res.redirect("/club");
+            });
+          });
+        }
       });
     }
   },
