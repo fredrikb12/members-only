@@ -14,10 +14,10 @@ block content
           button(type="submit") Log Out
       else 
         a(href="/club/log-in") Log In
-    div(style="display:flex; flex-wrap:wrap;") 
+    div(style="display:flex; flex-wrap:wrap;gap:30px;") 
       if messages
         for message in messages
-          div(style="border: 1px solid black; font-size:1.1rem;padding:8px;min-width:200px;")
+          div(style="border: 1px solid black; font-size:1.1rem;padding:8px;min-width:200px;max-width:clamp(300px, 80vw, 500px")
             if locals.currentUser && locals.currentUser.admin
               div(style="display:flex;justify-content:space-between;flex-direction:row-reverse;align-items:center;border-bottom:1px solid #cdcdcd;")
                 form(method="POST" action="/club/message/delete")
