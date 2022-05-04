@@ -4,7 +4,7 @@ block content
 
   h1= title
   if user 
-    h2 Welcome #{user}
+    h2 Welcome #{user.first_name}
 
   form(method="POST" action="/club/log-in")
     label(for="username") Email: 

@@ -16,4 +16,8 @@ router.post("/club/log-in", authController.user_login_post);
 
 router.post("/club/log-out", authController.user_logout_post);
 
+router.get("/club/promote", authController.user_promote_get);
+
+router.post("/club/promote", authController.user_promote_post);
+
 module.exports = router;

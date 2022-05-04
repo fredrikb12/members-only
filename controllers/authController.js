@@ -4,7 +4,9 @@ const async = require("async");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const { removeListener } = require("../models/user");
 const LocalStrategy = require("passport-local").Strategy;
+require("dotenv").config();
 
 exports.user_create_get = function (req, res, next) {
   if (req.user) {
@@ -58,7 +60,6 @@ exports.user_create_post = [
           user_type: "user",
         }).save((err) => {
           if (err) return next(err);
-          console.log("Hello");
           res.redirect("/club");
         });
       });
@@ -80,3 +81,51 @@ exports.user_logout_post = function (req, res, next) {
   req.logout();
   res.redirect("/");
 };
+
+exports.user_promote_get = function (req, res, next) {
+  if (req.user) {
+    res.render("user_promote", {
+      title: "Promote user",
+    });
+  } else {
+    res.redirect("/club/log-in");
+  }
+};
+
+exports.user_promote_post = [
+  body("secret", "Incorrect secret password").trim().escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.render("user_promote", {
+        title: "Promote user",
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      if (req.body.secret === process.env.MEMBER_SECRET) {
+        User.findByIdAndUpdate(req.user._id, { user_type: "member" }).exec(
+          function (err, results) {
+            if (err) return next(err);
+            res.redirect("/");
+            return;
+          }
+        );
+      } else if (req.body.secret === process.env.ADMIN_SECRET) {
+        User.findByIdAndUpdate(req.user._id, {
+          user_type: "member",
+          admin: true,
+        }).exec(function (err, results) {
+          if (err) return next(err);
+          res.redirect("/");
+          return;
+        });
+      } else {
+        res.render("user_promote", {
+          title: "Promote user",
+          errors: ["Incorrect secret password"],
+        });
+      }
+    }
+  },
+];

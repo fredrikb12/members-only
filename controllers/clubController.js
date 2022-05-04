@@ -6,54 +6,75 @@ const req = require("express/lib/request");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
 
-exports.user_create_get = function (req, res, next) {
-  res.render("user_form", { title: "Create User" });
+exports.index_get = function (req, res, next) {
+  Message.find()
+    .sort({ created_at: "desc" })
+    .populate("author")
+    .exec(function (err, results) {
+      if (err) return next(err);
+      else {
+        res.render("index", { title: "Home page", messages: results });
+      }
+    });
+  //res.render("index", { title: "Home page", user: req.user });
 };
 
-exports.user_create_post = [
-  body("first_name", "First name must be between 3 and 30 characters long.")
+exports.message_get = function (req, res, next) {
+  if (!req.user) res.redirect("/");
+  else {
+    res.render("message_form", { title: "Create Message" });
+  }
+};
+
+exports.message_post = [
+  body("title", "Title is required.")
     .trim()
-    .isLength({ min: 3, max: 30 })
+    .isLength({ min: 1, max: 50 })
     .escape(),
-  body("last_name", "Last name must be between 3 and 30 characters long.")
+  body("text", "Text is required and must be a maximum of 280 characters")
     .trim()
-    .isLength({ min: 3, max: 30 })
+    .isLength({ min: 1, max: 280 })
     .escape(),
-  body("username", "Email must be valid").normalizeEmail().isEmail().escape(),
-  body("password", "Password must be at least 5 characters long")
-    .trim()
-    .isLength({ min: 5 })
-    .escape(),
-  body("password_confirm", "Passwords must match")
-    .exists()
-    .trim()
-    .custom((value, { req }) => value === req.body.password),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.render("user_form", {
-        title: "Create User",
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        username: req.body.username,
-        errors: errors.array({ onlyFirstError: true }),
+      res.render("message_form", {
+        title: "Create message",
+        msgTitle: req.body.title,
+        msgText: req.body.text,
+        errors: errors.array(),
       });
-      return;
     } else {
-      bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+      const message = new Message({
+        title: req.body.title,
+        text: req.body.text,
+        author: res.locals.currentUser,
+      }).save((err) => {
         if (err) return next(err);
-        const user = new User({
-          first_name: req.body.first_name,
-          last_name: req.body.last_name,
-          username: req.body.username,
-          password: hashedPassword,
-          user_type: "user",
-        }).save((err) => {
-          if (err) return next(err);
-          console.log("Hello");
-          res.redirect("/club", { user: req.user});
-        });
+        res.redirect("/club");
       });
     }
   },
 ];
+
+exports.message_delete_post = function (req, res, next) {
+  Message.findById(req.body.messageid).exec(function (err, results) {
+    if (err) return next(err);
+    if (results == null) {
+      res.redirect("/club");
+      return;
+    } else {
+      Message.findByIdAndRemove(
+        req.body.messageid,
+        function deleteMessage(err) {
+          if (err) return next(err);
+          res.redirect("/club");
+        }
+      );
+    }
+  });
+};
+
+exports.message_delete_get = function(req, res, next) {
+  res.redirect("/");
+}

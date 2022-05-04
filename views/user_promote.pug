@@ -1,0 +1,17 @@
+extends layout 
+
+block content 
+
+  h1= title 
+  if locals.currentUser
+    p You are logged in as #[strong #{locals.currentUser.first_name} #{locals.currentUser.last_name}], would you like to try for a promotion?
+
+  
+  form(method="POST" action="")
+    label(for="secret") Secret Password:
+    input#secret(name="secret" type="password" required="true")
+    button(type="submit") Submit
+  if errors 
+    ul(style="padding:0;margin-top:30px;color:winered")
+      for error in errors
+        li(style="list-style:none;font-size:1.1rem;") #[strong #{error}]

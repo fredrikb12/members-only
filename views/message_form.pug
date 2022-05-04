@@ -1,0 +1,12 @@
+extends layout 
+
+block content 
+
+  h1= Title
+
+  form(method="POST" action="" style="display:grid;grid-template-columns:150px 1fr;gap:25px;max-width:650px;") 
+    label(for="title" style="font-size:1.2rem;") Title: 
+    input#title(name="title" type="text" placeholder="The weather" maxLength="50" required="true")
+    label(for="text" style="font-size:1.2rem;") Text: 
+    textarea#text(name="text" rows="7" cols="30" required="true" placeholder="Sunny and no wind." maxLength="280" style="resize:none;")
+    button(type="submit") Post

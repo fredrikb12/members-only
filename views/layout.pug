@@ -2,6 +2,28 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet' href='/stylesheets/style.css')
   body
+    nav(style="display:flex;justify-content:space-between;border-bottom: 1px solid black;padding: 0 20px;")
+      div
+        ul(style="list-style:none;padding:0; display:flex;gap:20px;")
+          li 
+            a(href="/club") Home
+          if locals.currentUser
+            li
+              a(href="/club/message") Create Message
+
+      div 
+        if !locals.currentUser
+          button(type="button")
+            a(href="/club/log-in") Log In
+        else 
+          div(style="display:flex;flex-direction:column;")
+            p #{locals.currentUser.first_name} #{locals.currentUser.last_name}
+            form(action="/club/log-out" method="POST")
+              button(type="submit") Log Out
+
+
+    
     block content
+

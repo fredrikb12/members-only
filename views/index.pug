@@ -1,12 +1,35 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to the clubhouse!
-  if user
-    p You are currently logged in as #[strong #{user.first_name}] #[strong #{user.last_name}]
-    p Your membership status is: #[strong #{user.user_type}]
-    form(method="POST" action="/club/log-out")
-      button(type="submit") Log Out
-  else 
-    a(href="/club/log-in") Log In
+  div(style="display:grid;grid-template-columns:30% 1fr;")
+    div
+      h1= title
+      p Welcome to the clubhouse!
+      if user
+        p You are currently logged in as #[strong #{user.first_name}] #[strong #{user.last_name}]
+        p Your membership status is: #[strong #{user.user_type}]
+      if locals.currentUser && locals.currentUser.admin
+        p You are an admin.
+        form(method="POST" action="/club/log-out")
+          button(type="submit") Log Out
+      else 
+        a(href="/club/log-in") Log In
+    div(style="display:flex; flex-wrap:wrap;") 
+      if messages
+        for message in messages
+          div(style="border: 1px solid black; font-size:1.1rem;padding:8px;min-width:200px;")
+            if locals.currentUser && locals.currentUser.admin
+              div(style="display:flex;justify-content:space-between;flex-direction:row-reverse;align-items:center;border-bottom:1px solid #cdcdcd;")
+                form(method="POST" action="/club/message/delete")
+                  input#messageid(type="hidden" name="messageid" required="true" value=message._id)
+                  button(type="submit") Delete
+                p(style="") #{message.title}
+            else
+                p(style="border-bottom: 1px solid #cdcdcd;") #{message.title}
+            p(style="") #{message.text}
+            if locals.currentUser && locals.currentUser.user_type == "member"
+              div(style="display:flex;gap:10px;align-items:center;")
+                p #{message.author.first_name} #{message.author.last_name} |
+                p(style="font-size:0.8rem;color: #ababab;") #{message.created_at}
+            
+
