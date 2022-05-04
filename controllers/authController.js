@@ -25,7 +25,9 @@ exports.user_create_post = [
     .trim()
     .isLength({ min: 3, max: 30 })
     .escape(),
-  body("username", "Email must be valid").normalizeEmail().isEmail(),
+  body("username", "Email must be valid")
+    .isEmail()
+    .normalizeEmail({ gmail_remove_dots: false }),
   body("password", "Password must be at least 5 characters long")
     .trim()
     .isLength({ min: 5 })
@@ -73,3 +75,8 @@ exports.user_login_post = passport.authenticate("local", {
   failureRedirect: "/log-in",
   failureMessage: true,
 });
+
+exports.user_logout_post = function (req, res, next) {
+  req.logout();
+  res.redirect("/");
+};

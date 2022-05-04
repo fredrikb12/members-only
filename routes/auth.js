@@ -14,4 +14,6 @@ router.get("/club/log-in", authController.user_login_get);
 
 router.post("/club/log-in", authController.user_login_post);
 
+router.post("/club/log-out", authController.user_logout_post);
+
 module.exports = router;
